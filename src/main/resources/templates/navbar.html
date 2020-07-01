@@ -104,6 +104,7 @@
                                 <a sec:authorize="hasRole('ROLE_DRIVER')" class="dropdown-item" th:href="@{/shipments/undeliveredShipments}">Undelivered shipments</a>
                                 <a sec:authorize="hasRole('ROLE_CLIENT')" class="dropdown-item" th:href="@{/customers/receivedShipments}">Received shipments</a>
                                 <a sec:authorize="hasRole('ROLE_CLIENT')" class="dropdown-item" th:href="@{/customers/sentShipments}">Sent shipments</a>
+                                <a sec:authorize="hasRole('ROLE_CLIENT')" class="dropdown-item" th:href="@{/customers/awaitingShipments}">Awaiting shipments</a>
                             </div>
                         </div>
                     </li>

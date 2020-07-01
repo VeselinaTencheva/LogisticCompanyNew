@@ -84,9 +84,15 @@ public class ShipmentServiceImpl implements ShipmentService {
 		return shipmentRepository.findShipmentByDelivered(true);
 	}
 
+
 	@Override
-	public List<Shipment> findUndeliveredShipments() {
-		return shipmentRepository.findShipmentByDelivered(false);
+	public List<Shipment> findUndeliveredShipmentsByCustomer(Customer customer,boolean isDelivered) {
+		return shipmentRepository.findShipmentByRecipientAndDelivered(customer,false);
+	}
+
+	@Override
+	public List<Shipment> findDeliveredShipmentsByCustomer(Customer customer, boolean isDelivered) {
+		return  shipmentRepository.findShipmentByRecipientAndDelivered(customer,true);
 	}
 
 	@Override
@@ -99,10 +105,6 @@ public class ShipmentServiceImpl implements ShipmentService {
 		return shipmentRepository.findShipmentBySender(customer);
 	}
 
-	@Override
-	public List<Shipment> findReceivedShipmentsByCustomer(Customer customer) {
-		return shipmentRepository.findShipmentByRecipient(customer);
-	}
 
 	@Override
 	public List<Shipment> findRegisteredShipmentsByEmployee(Employee employee) {

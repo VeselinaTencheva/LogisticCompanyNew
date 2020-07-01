@@ -27,13 +27,15 @@ public interface ShipmentService {
 
 	List<Shipment> findDeliveredShipments();
 
-	List<Shipment> findUndeliveredShipments();
+
+	List<Shipment> findUndeliveredShipmentsByCustomer(Customer customer,boolean isDelivered);
+
+	List<Shipment> findDeliveredShipmentsByCustomer(Customer customer,boolean isDelivered);
 
 	List<Shipment> findUndeliveredCheckedShipments();
 
 	List<Shipment> findSentShipmentsByCustomer(Customer customer);
 
-	List<Shipment> findReceivedShipmentsByCustomer(Customer customer);
 
 	List<Shipment> findRegisteredShipmentsByEmployee(Employee employee);
 }

@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.entities.Customer;
+import com.example.demo.models.binding.CustomerRegisterBindingModel;
 import com.example.demo.service.CustomerService;
 import com.example.demo.service.ShipmentService;
 import com.example.demo.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -23,11 +25,14 @@ public class CustomerController   {
 
     private final UserService userService;
 
+    private final ModelMapper modelMapper;
+
     @Autowired
-    public CustomerController(CustomerService customerService, ShipmentService shipmentService, UserService userService) {
+    public CustomerController(CustomerService customerService, ShipmentService shipmentService, UserService userService, ModelMapper modelMapper) {
         this.customerService = customerService;
         this.shipmentService = shipmentService;
         this.userService = userService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/register")
@@ -38,8 +43,14 @@ public class CustomerController   {
 
     @PostMapping("/register")
     @PreAuthorize("isAnonymous()")
-    public String registerConfirm(@ModelAttribute Customer customer) {
-        this.customerService.registerCustomer(customer);
+    public String registerConfirm(@ModelAttribute CustomerRegisterBindingModel model) {
+
+
+        if (!model.getPassword().equals(model.getConfirmPassword())) {
+            return "customer/register";
+        }
+
+        this.customerService.registerCustomer(this.modelMapper.map(model,Customer.class));
 
         return "login";
     }
@@ -72,7 +83,15 @@ public class CustomerController   {
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     public String receivedShipmentsByCustomer(Principal principal,Model model) {
         Customer customer = customerService.findCustomerById(userService.findUserByUserName(principal.getName()).getId());
-        model.addAttribute("shipments",shipmentService.findReceivedShipmentsByCustomer(customer));
+        model.addAttribute("shipments",shipmentService.findDeliveredShipmentsByCustomer(customer,true));
+        return "shipment/all";
+    }
+
+    @GetMapping("/awaitingShipments")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    public String awaitingShipmentsByCustomer(Principal principal,Model model) {
+        Customer customer = customerService.findCustomerById(userService.findUserByUserName(principal.getName()).getId());
+        model.addAttribute("shipments",shipmentService.findUndeliveredShipmentsByCustomer(customer,false));
         return "shipment/all";
     }
 

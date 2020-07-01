@@ -20,7 +20,9 @@ public interface ShipmentRepository extends JpaRepository<Shipment, String> {
 
     List<Shipment> findShipmentBySender(Customer sender);
 
-    List<Shipment> findShipmentByRecipient(Customer recipient);
+    List<Shipment> findShipmentByRecipientAndDelivered(Customer recipient,boolean isDelivered);
 
     List<Shipment> findShipmentByEmployee(Employee employee);
+
+
 }
