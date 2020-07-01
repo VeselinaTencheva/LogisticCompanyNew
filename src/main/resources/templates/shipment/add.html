@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<th:block th:include="~{head}"></th:block>
+</head>
+<body>
+<header>
+	<th:block th:include="~{navbar}"></th:block>
+</header>
+<main class="mt-3">
+    <h1 class="text-center text-dark">Add Shipment</h1>
+    <hr class="hr-2 bg-dark w-25">
+    <form id="add-shipment-form" class="form w-25 mx-auto" th:action="@{/shipments/add}" method="post" th:object="${shipment}">
+        <div class="form-group">
+            <label for="add-shipment-address" class="font-weight-bold">Address</label>
+            <input type="text" class="form-control text-center" id="add-shipment-address" name="address" th:value="*{address}">
+        </div>
+        <div class="form-group">
+            <label for="add-shipment-weight" class="font-weight-bold">Weight</label>
+            <input type="number" class="form-control text-center" id="add-shipment-weight" name="weight" th:value="*{weight}">
+        </div>
+        <div class="form-group">
+
+            <div class="form-group">
+                <label for="add-shipment-price" class="font-weight-bold">Price</label>
+                <input type="number" class="form-control text-center" id="add-shipment-price" name="price" th:value="*{price}">
+            </div>
+            <div class="form-group">
+
+            <div class="form-group">
+<!--                <label  class="font-weight-bold">Recipient</label>-->
+<!--                <select  class="form-control" id="add-shipment-recipient" name="recipientId" th:value="*{recipientId}">-->
+<!--                    <option  selected="" disabled="">-&#45;&#45; Select Recipient -&#45;&#45;</option>-->
+<!--                </select>-->
+                <label  class="font-weight-bold">Recipient</label>
+                <select class="form-control" name="recipientId">
+                    <option th:each="recipient : ${customers}"
+                            th:value="${recipient.id}" th:text="${recipient.name}" >------ Select Recipient --------</option>
+                </select>
+            </div>
+        </div>
+        <hr class="hr-2 bg-dark">
+        <div class="button-holder d-flex justify-content-center">
+            <button type="submit" class="btn btn-success">Add Shipment</button>
+        </div>
+    </form>
+</main>
+<footer>
+<th:block th:include="~{footer}"></th:block>
+</footer>
+</body>
+
+</html>
