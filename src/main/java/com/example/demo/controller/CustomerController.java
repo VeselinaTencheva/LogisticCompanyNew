@@ -71,6 +71,23 @@ public class CustomerController   {
 
     }
 
+    @GetMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String deleteCustomer(@PathVariable String id, Model model) {
+        Customer customer = this.customerService.findCustomerById(id);
+        model.addAttribute("model", customer);
+        return "customer/delete";
+    }
+
+    @PostMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String deleteCustomerConfirm(@PathVariable String id,Model model) {
+        Customer customer = this.customerService.findCustomerById(id);
+        this.customerService.deleteCustomer(customer);
+        model.addAttribute("customers",customerService.findAllCustomers());
+        return "customer/all";
+    }
+
     @GetMapping("/sentShipments")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     public String sentShipmentsByCustomer(Principal principal,Model model) {

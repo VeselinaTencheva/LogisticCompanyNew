@@ -81,7 +81,7 @@ public class OfficeController  {
     public String allEmployeesFromOffice(@PathVariable String id, Model model) {
         Office office = officeService.findById(id);
         model.addAttribute("model", employeeService.findEmployeesByOffice(office));
-        return "employee/all";
+        return "office/listed-employees";
     }
 
     @GetMapping("/offices/edit/{id}")
@@ -92,15 +92,16 @@ public class OfficeController  {
         return "office/edit";
     }
 
-    @PostMapping("/edit")
+    @PostMapping("/edit/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String editOfficeConfirm( Model model,
-                                    @ModelAttribute(name = "office") Office office) {
+    public String editOfficeConfirm(@PathVariable String id,Model model) {
+        Office office = this.officeService.findById(id);
         this.officeService.updateOffice(office);
-        model.addAttribute("office",office);
+//        model.addAttribute("office",office);
         model.addAttribute("offices",officeService.findAllOffices());
-        return  "office/all";
+        return  "office/listed-offices";
     }
+
 
 
     @GetMapping("/fetch")

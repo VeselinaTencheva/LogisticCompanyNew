@@ -18,4 +18,5 @@ public interface OfficeService {
 	Office updateAddress(Office office, String address);
 
 	Office updateOffice(Office office);
+
 }
