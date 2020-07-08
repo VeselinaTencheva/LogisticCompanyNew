@@ -94,8 +94,9 @@ public class OfficeController  {
 
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String editOfficeConfirm(@PathVariable String id,Model model) {
-        Office office = this.officeService.findById(id);
+    public String editOfficeConfirm(@PathVariable String id,Model model, @ModelAttribute(name = "office") Office office) {
+
+        office.setId(id);
         this.officeService.updateOffice(office);
 //        model.addAttribute("office",office);
         model.addAttribute("offices",officeService.findAllOffices());

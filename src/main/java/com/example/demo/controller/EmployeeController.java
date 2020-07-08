@@ -63,21 +63,7 @@ public class EmployeeController   {
 
     }
 
-    @GetMapping("/employees/update/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
-    public String updateEmployee(@PathVariable String id, Model model) {
-        Employee employee = this.employeeService.findEmployeeById(id);
-        model.addAttribute("model", employee);
-        return "employee/update";
-    }
 
-    @PostMapping("/update/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String updateEmployeeConfirm(@PathVariable String id,Model model) {
-        this.employeeService.updateEmployee(employeeService.findEmployeeById(id));
-        model.addAttribute("employees",employeeService.findAllEmployees());
-        return "employee/all";
-    }
 
 
     @GetMapping("/delete/{id}")

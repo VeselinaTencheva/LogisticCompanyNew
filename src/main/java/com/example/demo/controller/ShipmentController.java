@@ -48,7 +48,7 @@ public class ShipmentController  {
 	}
 
 	@PostMapping("/add")
-	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@PreAuthorize("hasAnyRole('ROLE_CLIENT','ROLE_EMPLOYEE')")
 	public String registerConfirm(Principal principal,Model model, @ModelAttribute(name="shipmentDTO")ShipmentDTO shipmentDTO) {
 
 		shipmentDTO.setSenderId(userService.findUserByUserName(principal.getName()).getId());
@@ -58,6 +58,25 @@ public class ShipmentController  {
 		return "shipment/all";
 
 	}
+
+//	@GetMapping("/shipments/edit/{id}")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	public String edit(@PathVariable String id,Model model){
+//		Shipment shipment = this.shipmentService.findShipmentById(id);
+//		model.addAttribute("model", shipment);
+//		model.addAttribute("customers",customerService.findAllCustomers());
+//		return "shipment/edit";
+//	}
+//
+//	@PostMapping("/edit/{id}")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	public String editShipmentConfirm(@PathVariable String id,Model model, @ModelAttribute(name = "shipment") Shipment shipment) {
+//
+//		shipment.setId(id);
+//		this.shipmentService.updateShipment(shipment);
+//		model.addAttribute("shipments",shipmentService.findAllShipments());
+//		return  "shipment/listed-shipments";
+//	}
 
 
 	@GetMapping("/allShipments")
@@ -117,14 +136,6 @@ public class ShipmentController  {
 		return "shipment/all";
 	}
 
-	@GetMapping("/shipments/edit/{id}")
-	@PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
-	public String edit(@PathVariable String id,Model model){
-		Shipment shipment = this.shipmentService.findShipmentById(id);
-		model.addAttribute("model", shipment);
-		model.addAttribute("customers",customerService.findAllCustomers());
-		return "shipment/edit";
-	}
 
 	@GetMapping("/shipments/registerShipment/{id}")
 	@PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")

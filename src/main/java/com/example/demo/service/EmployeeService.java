@@ -15,7 +15,7 @@ public interface EmployeeService {
 
 	public Employee createEmployee(Employee employee);
 
-	public Employee updateEmployee(Employee employee);
+	public Employee updateEmployee(EmployeeDTO employee);
 
 	public void registerShipment(Employee employee, Shipment shipment);
 

@@ -27,7 +27,6 @@
             <th sec:authorize="hasAnyRole('ADMIN','EMPLOYEE','DRIVER')" class="col-md-1 text-center">Delivered</th>
             <th sec:authorize="hasAnyRole('ADMIN','DRIVER')" class="col-md-1 text-center">Driver</th>
             <th sec:authorize="hasRole('ADMIN')" class="col-md-1 text-center">Employee</th>
-            <th sec:authorize="hasAnyRole('ADMIN','EMPLOYEE','DRIVER')" class="col-md-1 text-center">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -50,43 +49,8 @@
                     <td class="col-md-1 text-center" th:text="${shipment.driver}"></td>
                 </div>
                 <div sec:authorize="hasRole('ADMIN')">
-                     <td class="col-md-1 text-center" th:text="${shipment.employee}"></td>
+                    <td class="col-md-1 text-center" th:text="${shipment.employee}"></td>
                 </div>
-                <div sec:authorize="hasAnyRole('ADMIN','EMPLOYEE','DRIVER')">
-                    <div sec:authorize="hasAnyRole('ADMIN','EMPLOYEE')">
-                     <td class="col-md-1 text-center">
-                        <a  th:href="@{shipments/registerShipment/{id}(id=${shipment.id})} "
-                           class="btn btn-info btn-sm">
-                            Register
-                        </a>
-                     </td>
-                    </div>
-                    <div sec:authorize="hasAnyRole('ADMIN','DRIVER')">
-                    <td class="col-md-1 text-center">
-                        <a th:href="@{shipments/deliverShipment/{id}(id=${shipment.id})} "
-                           class="btn btn-info btn-sm">
-                            Deliver
-                        </a>
-                    </td>
-                    </div>
-<!--                    <div sec:authorize="hasAnyRole('ADMIN','EMPLOYEE')">-->
-<!--                    <td class="col-md-1 text-center">-->
-<!--                    <a th:href="@{shipments/edit/{id}(id=${shipment.id})} "-->
-<!--                       class="btn btn-info btn-sm">-->
-<!--                        Update-->
-<!--                    </a>-->
-<!--                    </td>-->
-<!--                    </div>-->
-                    <div sec:authorize="hasAnyRole('ADMIN','EMPLOYEE')">
-                    <td class="col-md-1 text-center">
-                        <a th:href="@{/shipments/delete/{id}(id=${shipment.id})}"
-                           class="btn btn-info btn-sm">
-                            Delete
-                        </a>
-                    </td>
-                    </div>
-                </div>
-                </td>
             </tr>
         </th:block>
 
