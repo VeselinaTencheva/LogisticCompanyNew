@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.entities.Customer;
+import com.example.demo.mapper.UserEmployeeMapper;
 import com.example.demo.repository.CustomerRepository;
+import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,14 +15,18 @@ public class CustomerServiceImpl implements CustomerService {
 
 	private final CustomerRepository customerRepository;
 	private final RoleService roleService;
+	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	private final UserEmployeeMapper userEmployeeMapper;
 
 
 	@Autowired
-	public CustomerServiceImpl(CustomerRepository customerRepository, RoleService roleService,BCryptPasswordEncoder bCryptPasswordEncoder) {
+	public CustomerServiceImpl(CustomerRepository customerRepository, RoleService roleService, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, UserEmployeeMapper userEmployeeMapper) {
 		this.customerRepository = customerRepository;
 		this.roleService = roleService;
+		this.userRepository = userRepository;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+		this.userEmployeeMapper = userEmployeeMapper;
 	}
 
 	@Override
@@ -55,17 +61,17 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public Customer registerCustomer(Customer customer) {
+	public void registerCustomer(Customer customer) {
 		this.roleService.seedRolesInDb();
-		if (this.customerRepository.count() == 0) {
-			customer.setAuthorities(this.roleService.findAllRoles());
+		if (this.userRepository.count() == 0) {
+			this.userRepository.saveAndFlush(userEmployeeMapper.mapCustomerToUser(customer));
 		} else {
 			customer.setAuthorities(new ArrayList<>());
 			customer.getAuthorities().add(this.roleService.findByAuthority("ROLE_CLIENT"));
-		}
-		customer.setPassword(this.bCryptPasswordEncoder.encode(customer.getPassword()));
+			customer.setPassword(this.bCryptPasswordEncoder.encode(customer.getPassword()));
 
-		return this.customerRepository.saveAndFlush(customer);
+			this.customerRepository.saveAndFlush(customer);
+		}
 	}
 
 }

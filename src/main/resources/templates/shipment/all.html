@@ -10,8 +10,8 @@
 </header>
 <main class="mt-3">
     <h1 class="text-center text-dark">All Shipments</h1>
-    <hr class="hr-2 bg-dark w-75">
-    <table class="table table-hover w-75 mx-auto ">
+    <hr class="hr-2 bg-dark w-100">
+    <table class="table table-hover w-100 mx-auto ">
         <thead>
         <tr class="row mx-auto">
             <th class="col-md-1 text-center">#</th>
@@ -53,7 +53,7 @@
                      <td class="col-md-1 text-center" th:text="${shipment.employee}"></td>
                 </div>
                 <div sec:authorize="hasAnyRole('ADMIN','EMPLOYEE','DRIVER')">
-                    <div sec:authorize="hasAnyRole('ADMIN','EMPLOYEE')">
+                    <div sec:authorize="hasRole('EMPLOYEE')">
                      <td class="col-md-1 text-center">
                         <a  th:href="@{shipments/registerShipment/{id}(id=${shipment.id})} "
                            class="btn btn-info btn-sm">
@@ -61,7 +61,7 @@
                         </a>
                      </td>
                     </div>
-                    <div sec:authorize="hasAnyRole('ADMIN','DRIVER')">
+                    <div sec:authorize="hasRole('DRIVER')">
                     <td class="col-md-1 text-center">
                         <a th:href="@{shipments/deliverShipment/{id}(id=${shipment.id})} "
                            class="btn btn-info btn-sm">

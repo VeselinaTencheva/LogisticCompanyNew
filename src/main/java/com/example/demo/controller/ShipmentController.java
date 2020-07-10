@@ -80,7 +80,7 @@ public class ShipmentController  {
 
 
 	@GetMapping("/allShipments")
-	@PreAuthorize("hasRole('ROLE_CLIENT')")
+	@PreAuthorize("hasAnyRole('ROLE_CLIENT','ROLE_ADMIN')")
 	public String allShipments(Model model) {
 		model.addAttribute("shipments",shipmentService.findAllShipments());
 		model.addAttribute("clients",customerService.findAllCustomers());
