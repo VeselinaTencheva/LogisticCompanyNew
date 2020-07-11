@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -49,14 +51,18 @@ public class ShipmentController  {
 
 	@PostMapping("/add")
 	@PreAuthorize("hasAnyRole('ROLE_CLIENT','ROLE_EMPLOYEE')")
-	public String registerConfirm(Principal principal,Model model, @ModelAttribute(name="shipmentDTO")ShipmentDTO shipmentDTO) {
-
-		shipmentDTO.setSenderId(userService.findUserByUserName(principal.getName()).getId());
-		Shipment shipment= this.shipmentService.createShipment(shipmentDTO);
-		model.addAttribute("shipment", shipment);
-		model.addAttribute("shipments",shipmentService.findAllShipments());
-		return "shipment/all";
-
+	public String registerConfirm(Principal principal, Model model, @ModelAttribute(name="shipmentDTO") @Valid ShipmentDTO shipmentDTO, BindingResult bindingResult) {
+		if (!bindingResult.hasErrors()) {
+			shipmentDTO.setSenderId(userService.findUserByUserName(principal.getName()).getId());
+			Shipment shipment = this.shipmentService.createShipment(shipmentDTO);
+			model.addAttribute("shipment", shipment);
+			model.addAttribute("shipments", shipmentService.findAllShipments());
+			return "shipment/all";
+		}else {
+			model.addAttribute("shipment", shipmentDTO);
+			model.addAttribute("customers",customerService.findAllCustomers());
+			return "shipment/add";
+		}
 	}
 
 //	@GetMapping("/shipments/edit/{id}")
