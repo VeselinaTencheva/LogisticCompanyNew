@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 
 @Controller
@@ -52,33 +55,24 @@ public class EmployeeController   {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String registerConfirm(Model model, @ModelAttribute(name="employeeDTO")EmployeeDTO employeeDTO) {
+    public String registerConfirm(Model model, @Valid @ModelAttribute(name="employeeDTO")EmployeeDTO employeeDTO, BindingResult bindingResult) {
 
-        Employee employee= this.employeeService.registerEmployee(employeeDTO);
-        employee.getOffice().getEmployees().add(employee);
-        officeRepository.saveAndFlush(employee.getOffice());
-        model.addAttribute("employee", employee);
-        model.addAttribute("model",employeeService.findAllEmployees());
-        return "employee/all";
+        if (!bindingResult.hasErrors()) {
+            if (!employeeDTO.getPassword().equals(employeeDTO.getConfirmPassword())) {
+                bindingResult.hasErrors();
+                return "employee/add";
+            }
 
+            Employee employee = this.employeeService.registerEmployee(employeeDTO);
+            employee.getOffice().getEmployees().add(employee);
+            officeRepository.saveAndFlush(employee.getOffice());
+            model.addAttribute("employee", employee);
+            model.addAttribute("model", employeeService.findAllEmployees());
+            return "employee/all";
+        }else {
+            return "employee/add";
+        }
     }
-
-    @GetMapping("/employees/update/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
-    public String updateEmployee(@PathVariable String id, Model model) {
-        Employee employee = this.employeeService.findEmployeeById(id);
-        model.addAttribute("model", employee);
-        return "employee/update";
-    }
-
-    @PostMapping("/update/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String updateEmployeeConfirm(@PathVariable String id,Model model) {
-        this.employeeService.updateEmployee(employeeService.findEmployeeById(id));
-        model.addAttribute("employees",employeeService.findAllEmployees());
-        return "employee/all";
-    }
-
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entities.User;
 import com.example.demo.models.binding.UserEditBindingModel;
+import com.example.demo.models.view.UserProfileViewModel;
+import com.example.demo.models.service.UserServiceModel;
 import com.example.demo.service.ShipmentService;
 import com.example.demo.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -56,7 +58,7 @@ public class UserController  {
 	@GetMapping("/edit")
 	@PreAuthorize("isAuthenticated()")
 	public String editProfile(Principal principal, Model model) {
-		model.addAttribute("model", this.modelMapper.map(this.userService.findUserByUserName(principal.getName()),User.class));
+		model.addAttribute("model", this.modelMapper.map(this.userService.findUserByUserName(principal.getName()), UserProfileViewModel.class));
 		return "user/edit-profile";
 	}
 
@@ -66,10 +68,11 @@ public class UserController  {
 		if(!model.getPassword().equals(model.getConfirmPassword())) {
 			return "user/edit-profile";
 		}
-		this.userService.editUserProfile(this.modelMapper.map(model, User.class), model.getOldPassword());
+		this.userService.editUserProfile(this.modelMapper.map(model, UserServiceModel.class), model.getOldPassword());
 
-		return "user/profile";
+		return "home";
 	}
+
 
 
 

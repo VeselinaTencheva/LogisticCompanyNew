@@ -17,7 +17,7 @@
             <th class="col-md-2 text-center">#</th>
             <th class="col-md-3 text-center">Address</th>
             <th class="col-md-3 text-center">Shipping Price</th>
-            <th sec:authorize="hasAnyRole('ADMIN')" class="col-md-3 text-center">Employees</th>
+            <th sec:authorize="hasRole('ADMIN')" class="col-md-1 text-center">Employees</th>
             <th sec:authorize="hasRole('ADMIN')" class="col-md-1 text-center">Actions</th>
         </tr>
         </thead>

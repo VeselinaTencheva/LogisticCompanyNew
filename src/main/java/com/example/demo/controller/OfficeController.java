@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,14 +45,18 @@ public class OfficeController  {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String addOfficeConfirm( Model model,
-                                         @ModelAttribute(name = "office") Office office) {
+    public String addOfficeConfirm(Model model,
+                                   @Valid @ModelAttribute(name = "office") Office office, BindingResult bindingResult) {
 
-       this.officeService.createOffice(office);
-        office.setCompany(companyService.findAll().get(0));
-        model.addAttribute("office",office);
-        model.addAttribute("offices",officeService.findAllOffices());
-        return  "office/all";
+        if(!bindingResult.hasErrors()) {
+            this.officeService.createOffice(office);
+            office.setCompany(companyService.findAll().get(0));
+            model.addAttribute("office", office);
+            model.addAttribute("offices", officeService.findAllOffices());
+            return "office/all";
+        }else{
+            return "office/add";
+        }
     }
 
     @GetMapping("/all")
@@ -94,8 +100,9 @@ public class OfficeController  {
 
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String editOfficeConfirm(@PathVariable String id,Model model) {
-        Office office = this.officeService.findById(id);
+    public String editOfficeConfirm(@PathVariable String id,Model model, @ModelAttribute(name = "office") Office office) {
+
+        office.setId(id);
         this.officeService.updateOffice(office);
 //        model.addAttribute("office",office);
         model.addAttribute("offices",officeService.findAllOffices());

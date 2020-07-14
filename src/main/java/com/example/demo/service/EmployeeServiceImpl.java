@@ -103,9 +103,9 @@ public class EmployeeServiceImpl  implements EmployeeService {
 	}
 
 	@Override
-	public Employee updateEmployee(Employee employee) {
+	public Employee updateEmployee(EmployeeDTO employeeDTO) {
 
-
+        Employee employee=this.employeeMapper.mapEmployeeDTOToEmployee(employeeDTO);
 		return this.employeeRepository.saveAndFlush(employee);
 	}
 

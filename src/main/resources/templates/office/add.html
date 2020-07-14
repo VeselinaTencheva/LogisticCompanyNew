@@ -14,11 +14,13 @@
     <form id="add-shipment-form" class="form w-25 mx-auto" th:action="@{/offices/add}" method="post" th:object="${office}">
         <div class="form-group">
             <label for="add-shipment-address" class="font-weight-bold">Address</label>
+            <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"style="color: red"></span>
             <input type="text" class="form-control text-center" id="add-shipment-address" name="address" th:value="*{address}">
         </div>
         <div class="form-group">
             <label for="add-office-shippingPrice" class="font-weight-bold">Shipping Price</label>
-            <input type="number" class="form-control text-center" id="add-office-shippingPrice" name="shippingPrice" th:value="*{shippingPrice}">
+            <span th:if="${#fields.hasErrors('shippingPrice')}" th:errors="*{shippingPrice}"style="color: red"></span>
+            <input type="number" step="0.01" class="form-control text-center" id="add-office-shippingPrice" name="shippingPrice" th:value="*{shippingPrice}">
         </div>
         <hr class="hr-2 bg-dark">
         <div class="button-holder d-flex justify-content-center">

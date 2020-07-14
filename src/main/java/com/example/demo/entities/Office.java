@@ -4,15 +4,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Set;
 
 @Entity
 @Table(name = "offices")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Office extends BaseEntity {
+
+
+	@NotBlank(message = " - Error: Address cannot be blank")
 	private String address;
+
 	private Company company;
+
+	@Positive(message = " - Error: Shipping price cannot be negative")
+	@NotNull(message = " - Error: Shipping price cannot be null")
 	private  double shippingPrice;
+
 	private Set<Employee> employees; 
 
 	public Office() {

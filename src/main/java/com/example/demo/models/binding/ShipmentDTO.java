@@ -3,6 +3,10 @@ package com.example.demo.models.binding;
 import com.example.demo.entities.Customer;
 import com.example.demo.entities.Employee;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,6 +28,7 @@ public class ShipmentDTO {
         this.id = id;
     }
 
+    @NotBlank(message = " - Error: Address must not be blank!")
     public String getAddress() {
         return address;
     }
@@ -32,6 +37,8 @@ public class ShipmentDTO {
         this.address = address;
     }
 
+    @NotNull(message = " - Error: Weight cannot be null")
+    @Positive(message = " - Error: Minimal weight must be greater than 0")
     public double getWeight() {
         return weight;
     }
@@ -40,6 +47,8 @@ public class ShipmentDTO {
         this.weight = weight;
     }
 
+    @NotNull(message = " - Error: Price must not be null")
+    @Min(message = " - Error: Minimal price is set to 1",value = 1)
     public double getPrice() {
         return price;
     }
