@@ -84,7 +84,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="adminDropdown">
                                 <a class="dropdown-item" th:href="@{/offices/all}">All Offices</a>
-                                <a class="dropdown-item" th:href="@{/offices/add}">Create Office</a>
+                                <a sec:authorize="hasAnyRole('ROLE_ADMIN')" class="dropdown-item" th:href="@{/offices/add}">Create Office</a>
                             </div>
                         </div>
                     </li>

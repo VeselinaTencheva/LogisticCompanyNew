@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -37,22 +39,27 @@ public class CustomerController   {
 
     @GetMapping("/register")
     @PreAuthorize("isAnonymous()")
-    public String register() {
+    public String register(Model model, @ModelAttribute(name = "customerBinding") CustomerRegisterBindingModel customerRegisterBindingModel){
+        model.addAttribute("customerRegisterBindingModel",customerRegisterBindingModel);
         return "customer/register";
     }
 
     @PostMapping("/register")
     @PreAuthorize("isAnonymous()")
-    public String registerConfirm(@ModelAttribute CustomerRegisterBindingModel model) {
+    public String registerConfirm(@Valid @ModelAttribute(name = "customerBinding") CustomerRegisterBindingModel model, BindingResult bindingResult) {
 
+        if (!bindingResult.hasErrors()) {
+            if (!model.getPassword().equals(model.getConfirmPassword())) {
+                bindingResult.hasErrors();
+                return "customer/register";
+            }
 
-        if (!model.getPassword().equals(model.getConfirmPassword())) {
+            this.customerService.registerCustomer(this.modelMapper.map(model, Customer.class));
+
+            return "login";
+        }else{
             return "customer/register";
         }
-
-        this.customerService.registerCustomer(this.modelMapper.map(model,Customer.class));
-
-        return "login";
     }
 
     @GetMapping("/all")
