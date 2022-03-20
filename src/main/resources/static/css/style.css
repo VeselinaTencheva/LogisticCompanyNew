@@ -25,4 +25,6 @@ img.img-thumbnail {
     max-height: 40px;
 }
 
-
+.border-none{
+    border: none;
+}
